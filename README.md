@@ -98,7 +98,7 @@ lb_security_groups | Load Balancer security groups
 
 ```terraform
 module vsi {
-  source                = "github.com/Cloud-Schematics/vsi-module.git"ß
+  source                = "github.com/Cloud-Schematics/vsi-module.git"
   resource_group_id     = var."resource_group_id"
   prefix                = var."prefix"
   tags                  = var."tags"
