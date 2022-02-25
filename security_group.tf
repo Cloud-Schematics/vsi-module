@@ -3,9 +3,13 @@
 ##############################################################################
 
 locals {
+  vsi_security_group = [var.create_security_group ? var.security_group : null]
   # Create list of all security groups including the ones for load balancers
   security_groups = flatten([
-    var.security_group,
+    [
+      for group in local.vsi_security_group :
+      group if group != null
+    ],
     [
       for load_balancer in var.load_balancers :
       load_balancer.security_group if load_balancer.security_group != null

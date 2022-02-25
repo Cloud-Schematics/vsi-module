@@ -90,6 +90,12 @@ variable "enable_floating_ip" {
   default     = true
 }
 
+variable "create_security_group" {
+  description = "Create security group for VSI. If this is passed as false, the default will be used"
+  type        = bool
+  default     = true
+}
+
 variable "security_group" {
   description = "Security group for VSI"
   type = object({
