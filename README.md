@@ -76,7 +76,9 @@ machine_type          | string                                                  
 vsi_per_subnet        | number                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   | Number of VSI instances for each subnet                                                  |           | 1
 user_data             | string                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   | User data to initialize VSI deployment                                                   |           | null
 enable_floating_ip    | bool                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     | Create a floating IP for each virtual server created                                     |           | true
+create_security_group | bool                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     | Create security group for VSI. If this is passed as false, the default will be used                             |           | true
 security_group        | object({ name = string rules = list( object({ name = string direction = string source = string tcp = optional( object({ port_max = number port_min = number }) ) udp = optional( object({ port_max = number port_min = number }) ) icmp = optional( object({ type = number code = number }) ) }) ) })                                                                                                                                                                                                                                                                                                                    | Security group for VSI                                                                   |           | 
+security_group_ids    | list(string)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             | IDs of additional security groups to be added to VSI deployment. A VSI can have a maximum of 5 security groups. |           | []
 block_storage_volumes | list( object({ name = string profile = string capacity = optional(number) iops = optional(number) encryption_key = optional(string) }) )                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 | List describing the block storage volumes that will be attached to each vsi              |           | [{<br>name = "one"<br>profile = "general-purpose"<br>},<br>{<br>name = "two"<br>profile = "general-purpose"<br>}]
 load_balancers        | list( object({ name = string type = string listener_port = number listener_protocol = string connection_limit = number algorithm = string protocol = string health_delay = number health_retries = number health_timeout = number health_type = string pool_member_port = string security_group = optional( object({ name = string rules = list( object({ name = string direction = string source = string tcp = optional( object({ port_max = number port_min = number }) ) udp = optional( object({ port_max = number port_min = number }) ) icmp = optional( object({ type = number code = number }) ) }) ) }) ) }) ) | Load balancers to add to VSI                                                             |           | []
 
@@ -99,19 +101,21 @@ lb_security_groups | Load Balancer security groups
 ```terraform
 module vsi {
   source                = "github.com/Cloud-Schematics/vsi-module.git"
-  resource_group_id     = var."resource_group_id"
-  prefix                = var."prefix"
-  tags                  = var."tags"
-  vpc_id                = var."vpc_id"
-  subnets               = var."subnets"
-  image                 = var."image"
-  ssh_key_ids           = var."ssh_key_ids"
-  machine_type          = var."machine_type"
-  vsi_per_subnet        = var."vsi_per_subnet"
-  user_data             = var."user_data"
-  enable_floating_ip    = var."enable_floating_ip"
-  security_group        = var."security_group"
-  block_storage_volumes = var."block_storage_volumes"
-  load_balancers        = var."load_balancers"
+  resource_group_id     = var.resource_group_id
+  prefix                = var.prefix
+  tags                  = var.tags
+  vpc_id                = var.vpc_id
+  subnets               = var.subnets
+  image                 = var.image
+  ssh_key_ids           = var.ssh_key_ids
+  machine_type          = var.machine_type
+  vsi_per_subnet        = var.vsi_per_subnet
+  user_data             = var.user_data
+  enable_floating_ip    = var.enable_floating_ip
+  create_security_group = var.create_security_group
+  security_group        = var.security_group
+  security_group_ids    = var.security_group_ids
+  block_storage_volumes = var.block_storage_volumes
+  load_balancers        = var.load_balancers
 }
 ```

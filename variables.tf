@@ -97,7 +97,7 @@ variable "create_security_group" {
 }
 
 variable "security_group" {
-  description = "Security group for VSI"
+  description = "Security group created for VSI"
   type = object({
     name = string
     rules = list(
@@ -161,6 +161,22 @@ variable "security_group" {
     ) == 0
   }
 
+}
+
+variable "security_group_ids" {
+  description = "IDs of additional security groups to be added to VSI deployment. A VSI can have a maximum of 5 security groups."
+  type        = list(string)
+  default     = []
+
+  validation {
+    error_message = "Security group IDs must be unique."
+    condition     = length(var.security_group_ids) == length(distinct(var.security_group_ids))
+  }
+
+  validation {
+    error_message = "No more than 5 security groups can be added to a VSI deployment."
+    condition     = length(var.security_group_ids) <= 5
+  }
 }
 
 variable "block_storage_volumes" {

@@ -51,7 +51,9 @@ resource "ibm_is_instance" "vsi" {
 
   primary_network_interface {
     subnet          = each.value.subnet_id
-    security_groups = [ibm_is_security_group.security_group[var.security_group.name].id]
+    security_groups = flatten(
+      (var.create_security_group ? [ibm_is_security_group.security_group[var.security_group.name].id] : []),
+      var.security_group_ids
   }
 
   # Only add volumes if volumes are being created by the module
