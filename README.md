@@ -1,4 +1,4 @@
-# VSI on VPC Module
+# VSI on VPC Module (Version 2)
 
 This module allows users to create any number of VSI across multple subnets with any number of block storage volumes, connected by any number of load balancers.
 
